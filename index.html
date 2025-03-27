@@ -7,13 +7,6 @@
 </head>
 <body>
     <h1>Library Management System</h1>
-    
-    <!-- Search form -->
-    <form action="SearchBookServlet" method="get">
-        <label for="searchQuery">Search by Book ID or Title: </label>
-        <input type="text" id="searchQuery" name="searchQuery" required>
-        <button type="submit">Search</button>
-    </form>
 
     <!-- Add book form -->
     <form action="BookServlet" method="post">
@@ -30,6 +23,30 @@
             <option value="Checked Out">Checked Out</option>
         </select><br><br>
         <button type="submit">Add Book</button>
+    </form>
+      <!-- Search form -->
+    <form action="SearchBookServlet" method="get">
+        <label for="searchQuery">Search by Book ID or Title: </label>
+        <input type="text" id="searchQuery" name="searchQuery" required>
+        <button type="submit">Search</button>
+    </form>
+
+     <!-- Update Book form -->
+    <form action="UpdateBookServlet" method="get">
+        <h2>Update Book</h2>
+        <label for="updateBookId">Enter Book ID to Update:</label>
+        <input type="text" id="updateBookId" name="bookId" required><br><br>
+        <button type="submit">Search for Book to Update</button>
+    </form>
+
+    <hr>
+
+    <!-- Delete Book form -->
+    <form action="DeleteBookServlet" method="post">
+        <h2>Delete Book</h2>
+        <label for="deleteBookId">Enter Book ID to Delete:</label>
+        <input type="text" id="deleteBookId" name="bookId" required><br><br>
+        <button type="submit">Delete Book</button>
     </form>
 
 </body>
