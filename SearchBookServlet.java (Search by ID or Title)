@@ -1,0 +1,39 @@
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.util.*;
+
+public class SearchBookServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String searchQuery = request.getParameter("searchQuery");
+
+        if (searchQuery == null || searchQuery.trim().isEmpty()) {
+            response.getWriter().println("Please provide a search query.");
+            return;
+        }
+
+        HttpSession session = request.getSession();
+        List<Book> books = (List<Book>) session.getAttribute("books");
+
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+
+        List<Book> foundBooks = new ArrayList<>();
+        for (Book book : books) {
+            if (String.valueOf(book.getBookId()).contains(searchQuery) || book.getTitle().toLowerCase().contains(searchQuery.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
+
+        // Display found books
+        if (!foundBooks.isEmpty()) {
+            request.setAttribute("books", foundBooks);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/searchResults.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            response.getWriter().println("No books found for the search query.");
+        }
+    }
+}
