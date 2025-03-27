@@ -1,0 +1,49 @@
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.util.*;
+
+public class BookServlet extends HttpServlet {
+    private static final String BOOK_LIST_PAGE = "/bookList.html"; // Redirect to the page to display books
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Get the book details from form
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        String genre = request.getParameter("genre");
+        String availability = request.getParameter("availability");
+
+        // Validate input fields
+        if (title == null || title.trim().isEmpty()) {
+            response.getWriter().println("Title cannot be empty.");
+            return;
+        }
+
+        if (author == null || author.trim().isEmpty()) {
+            response.getWriter().println("Author cannot be empty.");
+            return;
+        }
+
+        if (!(availability.equals("Available") || availability.equals("Checked Out"))) {
+            response.getWriter().println("Availability must be either 'Available' or 'Checked Out'.");
+            return;
+        }
+
+        // Generate a unique Book ID (for simplicity, using current time as a unique ID)
+        int bookId = (int) System.currentTimeMillis();
+
+        // Create a new Book object and add it to the list
+        Book newBook = new Book(bookId, title, author, genre, availability);
+        HttpSession session = request.getSession();
+        List<Book> books = (List<Book>) session.getAttribute("books");
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        books.add(newBook);
+        session.setAttribute("books", books);
+
+        // Redirect to the book list page
+        response.sendRedirect(request.getContextPath() + BOOK_LIST_PAGE);
+    }
+}
